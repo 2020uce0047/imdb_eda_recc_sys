@@ -30,6 +30,10 @@ df['Genre2'] = Genre2
 df['Genre3'] = Genre3
 df = df.drop(columns = 'Genre')
 
+# Remove , from Gross values
+df['Gross'] = df['Gross'].str.replace(',', '')
+print(df.Gross.dtype)
+
 #Dropping movies with certificate having value count(s) < 10
 unique_cert = df['Certificate'].value_counts()
 print(unique_cert)
