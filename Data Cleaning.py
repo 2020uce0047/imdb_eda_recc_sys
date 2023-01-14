@@ -46,4 +46,5 @@ df = df.drop(df[(df['Certificate'] == 'TV-PG') |
                 (df['Certificate'] == 'Unrated') |
                 (df['Certificate'] == 'U/A')].index)
 
-
+#Saving the cleaning dataset
+df.to_csv('imdb_top_1000_cleaned.csv')
