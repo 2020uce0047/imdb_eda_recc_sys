@@ -12,23 +12,48 @@ import numpy as np
 df = pd.read_csv('imdb_top_1000.csv')
 df = df.drop(columns = ['Poster_Link'])
 
-#Duration column in min
+
+#Duration in min
 duration = df['Runtime'].apply(lambda x: x.split(' ')[0])
 df['Duration(min)'] = duration
 df['Duration(min)'].astype(int)
 df = df.drop(columns = ['Runtime'])
 
-# Splitting multiple genre
-value_count_genre = df['Genre'].apply(lambda x: len(x.split(',')))
-print(max(value_count_genre))
-Genre1 = df['Genre'].apply(lambda x: x.split(',')[0])
-Genre2 = df['Genre'].apply(lambda x: x.split(',')[1] if len(x.split(','))==2 else '')
-Genre3 = df['Genre'].apply(lambda x: x.split(',')[2] if len(x.split(','))==3 else '')
 
-df['Genre1'] = Genre1
-df['Genre2'] = Genre2
-df['Genre3'] = Genre3
-df = df.drop(columns = 'Genre')
+#Make the values of Gross column integral
+df['Gross'] = df['Gross'].str.replace(',', '')
+df['Gross'].fillna(0, inplace = True)
+df['Gross'].astype(int)
+
+
+#Replace null values by 'na'
+for i in df.columns:
+  if(df[i].dtype == object):
+    df[i].fillna('na', inplace = True)
+
+
+#Extract genres of the movies
+gen_unique = []
+for genre in df['Genre']:
+    t = len(genre.split(', '))
+    for j in range(t):
+        if genre.split(', ')[j] not in gen_unique:
+            gen_unique.append(genre.split(', ')[j])  
+if('Other' not in gen_unique):
+    gen_unique.append('Other')
+
+#Create columns for each unique genre
+k = 'default'            
+def check_genre(genre):
+    t = len(genre.split(', '))
+    for j in range(t):
+        if genre.split(', ')[j] == k:
+            return 1
+    else:
+        return 0
+for i in gen_unique:
+    k = i
+    df[i] = df['Genre'].apply(check_genre)    
 
 # Remove , from Gross values
 df['Gross'] = df['Gross'].str.replace(',', '')
