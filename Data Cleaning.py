@@ -23,6 +23,7 @@ df = df.drop(columns = ['Runtime'])
 #Make the values of Gross column integral
 df['Gross'] = df['Gross'].str.replace(',', '')
 df['Gross'].fillna(0, inplace = True)
+df['Meta_score'].fillna(0, inplace = True)
 df['Gross'].astype(int)
 
 
