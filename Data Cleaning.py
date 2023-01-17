@@ -32,7 +32,7 @@ for i in df.columns:
     df[i].fillna('na', inplace = True)
 
 
-#Extract genres of the movies
+#Extract unique genres of the movies
 gen_unique = []
 for genre in df['Genre']:
     t = len(genre.split(', '))
@@ -54,10 +54,6 @@ def check_genre(genre):
 for i in gen_unique:
     k = i
     df[i] = df['Genre'].apply(check_genre)    
-
-# Remove , from Gross values
-df['Gross'] = df['Gross'].str.replace(',', '')
-print(df.Gross.dtype)
 
 #Dropping movies with certificate having value count(s) < 10
 unique_cert = df['Certificate'].value_counts()
